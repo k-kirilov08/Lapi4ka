@@ -1,4 +1,5 @@
 ﻿using Lapi4ka.Data.Entitys;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +52,26 @@ namespace Lapi4ka.Data
             .WithMany(t => t.Applications)
             .HasForeignKey(s => s.UserId)
             .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<IdentityRole>().HasData(
+           new IdentityRole
+           {
+               Id = "1",
+               Name = Lapi4ka.Data.Constants.UserRoles.Admin,
+               NormalizedName = Lapi4ka.Data.Constants.UserRoles.Admin.ToUpper()
+           },
+           new IdentityRole
+           {
+               Id = "2",
+               Name = Lapi4ka.Data.Constants.UserRoles.Employee,
+               NormalizedName = Lapi4ka.Data.Constants.UserRoles.Employee.ToUpper()
+           },
+           new IdentityRole
+           {
+               Id = "3",
+               Name = Lapi4ka.Data.Constants.UserRoles.User,
+               NormalizedName = Lapi4ka.Data.Constants.UserRoles.User.ToUpper()
+           });
         }
     }
 }

@@ -1,0 +1,101 @@
+﻿@model IEnumerable<Lapi4ka.Data.Entitys.Application>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Activity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MondayFree)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TuesdayFree)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WednesdayFree)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ThursdayFree)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FridayFree)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SaturdayFree)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SundayFree)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Message)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Activity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MondayFree)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TuesdayFree)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WednesdayFree)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ThursdayFree)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FridayFree)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SaturdayFree)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SundayFree)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
