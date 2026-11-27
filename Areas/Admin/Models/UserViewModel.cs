@@ -15,7 +15,6 @@ namespace Lapi4ka.Areas.Admin.Models
         public string LastName { get; set; }
         [DisplayName("Парола")]
         [Required]
-        [StringLength(100, ErrorMessage = "Паролата трябва да е минимум 6 знака", MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
         [DisplayName("Потвърди Парола")]

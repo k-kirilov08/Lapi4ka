@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Lapi4ka.Servives;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Lapi4ka.Data.Seed;
+using Lapi4ka.Common.Describers;
 
 namespace Lapi4ka
 {
@@ -30,7 +31,8 @@ namespace Lapi4ka
                 options.Password.RequireLowercase = true;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders(); ;
+            .AddDefaultTokenProviders()
+            .AddErrorDescriber<BulgarianIdentityErrorDescriber>();
             builder.Services.AddSingleton<IEmailSender, DummyEmailSender>();
 
             builder.Services.AddRazorPages();
