@@ -1,5 +1,7 @@
-﻿using Lapi4ka.Data;
+﻿using Lapi4ka.Areas.Admin.Models;
+using Lapi4ka.Data;
 using Lapi4ka.Data.Entitys;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +11,25 @@ namespace Lapi4ka.Areas.Admin.Controllers
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public UsersController(ApplicationDbContext context)
+        readonly IUserStore<ApplicationUser> _userStore;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserEmailStore<ApplicationUser> _emailStore;
+ 
+        public UsersController(ApplicationDbContext context, IUserStore<ApplicationUser> userStore, UserManager<ApplicationUser> userManager)
         {
+            _userStore = userStore;
             _context = context;
+            _userManager = userManager;
+            _emailStore = GetEmailStore();
+
+        }
+        private IUserEmailStore<ApplicationUser> GetEmailStore()
+        {
+            if (!_userManager.SupportsUserEmail)
+            {
+                throw new NotSupportedException("The default UI requires a user store with email support.");
+            }
+            return (IUserEmailStore<ApplicationUser>)_userStore;
         }
         public async Task<IActionResult> Index()
         {
@@ -36,17 +53,28 @@ namespace Lapi4ka.Areas.Admin.Controllers
         }
         public IActionResult Create()
         {
-            return View();
+            UserViewModel model = new UserViewModel();
+            return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] ApplicationUser user)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Email,Password,RepeatPassword,UserRole")] UserViewModel user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ApplicationUser appUser = new ApplicationUser();
+                appUser.Email = user.Email;
+                appUser.FirstName = user.FirstName;
+                appUser.LastName = user.LastName;
+                await _userStore.SetUserNameAsync(appUser, user.Email, CancellationToken.None);
+                await _emailStore.SetEmailAsync(appUser, user.Email, CancellationToken.None);
+                
+                var result = await _userManager.CreateAsync(appUser, user.Password);
+                if (result.Succeeded)
+                {
+                    _userManager.AddToRoleAsync(appUser, user.UserRole).GetAwaiter().GetResult();
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(user);
         }
